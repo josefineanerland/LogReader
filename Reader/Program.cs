@@ -8,16 +8,13 @@ namespace Reader
     class Program
     {
 
-
-        static void Main(string[] args)
+        static void ReadLog(string file)
         {
             List<logModel> logList = new List<logModel>();
             List<observationModel> obsList = new List<observationModel>();
 
             try
             {
-
-                string file = @"C:\Users\Svea User\Desktop\Items.txt";
 
                 using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
                 {
@@ -102,5 +99,10 @@ namespace Reader
             }
         }
 
+        static void Main(string[] args)
+        {
+            ReadLog(@"C:\Users\Svea User\Desktop\Items.txt");
+        }
     }
+
 }
