@@ -75,7 +75,7 @@ namespace Reader
                 IEnumerable<int> sessionList = logList.Select(s => s.sessionId).Distinct().ToList();
                 foreach (int sess in sessionList)
                 {
-                    
+
                     List<logModel> logs = logList.FindAll(l => l.sessionId == sess);
 
                     for (int i = 0; i < logs.Count(); i++)
@@ -95,7 +95,7 @@ namespace Reader
                 }
                 foreach (observationModel item in obsList)
                 {
-                    Console.WriteLine(item.timeSpan + " " + item.outCome +" " + item.IPadress + " " + item.userName);
+                    Console.WriteLine(item.timeSpan + " " + item.outCome + " " + item.IPadress + " " + item.userName);
                 }
 
                 Console.WriteLine("Executing finally block.");
