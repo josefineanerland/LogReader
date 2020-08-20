@@ -1,8 +1,10 @@
-﻿namespace Reader
+﻿using System;
+
+namespace Reader
 {
-    public class logModel
+    public class LogModel
     {
-        public string timeStamp { get; set; }
+        public TimeSpan timeStamp { get; set; }
         public int sessionId { get; set; }
         public string Event { get; set; }
         public string Data { get; set; }

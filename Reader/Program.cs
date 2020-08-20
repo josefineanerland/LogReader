@@ -11,8 +11,8 @@ namespace Reader
 
         static void ReadLog(string file)
         {
-            List<logModel> logList = new List<logModel>();
-            List<observationModel> obsList = new List<observationModel>();
+            List<LogModel> logList = new List<LogModel>();
+            List<ObservationModel> obsList = new List<ObservationModel>();
 
             try
             {
@@ -32,8 +32,9 @@ namespace Reader
                                 string[] split = line.Split('\t');
                                 if (split.Length == 4)
                                 {
-                                    logModel logModel = new logModel();
-                                    logModel.timeStamp = split[0];
+                                    LogModel logModel = new LogModel();
+                                    logModel.timeStamp = TimeSpan.Parse(split[0]);
+                                    //check if sessionID contains letters, otherwise skip
                                     if (Int32.TryParse(split[1], out int s))
                                     {
                                         logModel.sessionId = s;
@@ -46,7 +47,7 @@ namespace Reader
                                 else
                                 // in case of whitespace between values instead of tab
                                 {
-                                    logModel logModel = new logModel();
+                                    LogModel logModel = new LogModel();
                                     char[] chars = { '\t', ' ' };
                                     string time = line.Substring(0, line.IndexOfAny(chars));
                                     line = line.Substring(time.Length + 1);
@@ -56,7 +57,7 @@ namespace Reader
                                     line = line.Substring(ev.Length + 1);
                                     string data = line;
 
-                                    logModel.timeStamp = time;
+                                    logModel.timeStamp = TimeSpan.Parse(time);
                                     logModel.sessionId = Int32.Parse(sess);
                                     logModel.Event = ev;
                                     logModel.Data = data;
@@ -82,14 +83,14 @@ namespace Reader
 
                 foreach (int sess in sessionList)
                 {
-                    List<logModel> logs = logList.FindAll(l => l.sessionId == sess);
+                    List<LogModel> logs = logList.FindAll(l => l.sessionId == sess);
 
 
                     for (int i = 0; i < logs.Count(); i++)
                     {
                         if (logs[i].Event == "SUCCESS" || logs[i].Event == "FAIL" && logs.FindAll(x => x.Event == "CONNECT").Count >= 1)
                         {
-                            observationModel observation = new observationModel();
+                            ObservationModel observation = new ObservationModel();
                             observation.IPadress = logs.Find(o => o.Event == "CONNECT").Data;
                             observation.userName = logs[i - 1].Data;
                             observation.outCome = logs[i].Event;
@@ -101,7 +102,7 @@ namespace Reader
 
                 }
                 //print observations
-                foreach (observationModel item in obsList)
+                foreach (ObservationModel item in obsList)
                 {
                     Console.WriteLine(item.timeStamp + " " + item.outCome + " " + item.IPadress + " " + item.userName);
                 }

@@ -1,8 +1,10 @@
-﻿namespace Reader
+﻿using System;
+
+namespace Reader
 {
-    class observationModel
+    class ObservationModel
     {
-        public string timeStamp { get; set; }
+        public TimeSpan timeStamp { get; set; }
         public string IPadress { get; set; }
         public string outCome { get; set; }
         public string userName { get; set; }
