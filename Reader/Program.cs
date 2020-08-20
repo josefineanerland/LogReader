@@ -34,7 +34,10 @@ namespace Reader
                                 {
                                     logModel logModel = new logModel();
                                     logModel.timeStamp = split[0];
-                                    logModel.sessionId = Int32.Parse(split[1]);
+                                    if (Int32.TryParse(split[1], out int s))
+                                    {
+                                        logModel.sessionId = s;
+                                    }
                                     logModel.Event = split[2];
                                     logModel.Data = split[3];
 
@@ -77,11 +80,10 @@ namespace Reader
 
                 IEnumerable<int> sessionList = logList.Select(s => s.sessionId).Distinct().ToList();
 
-
                 foreach (int sess in sessionList)
                 {
-                    
                     List<logModel> logs = logList.FindAll(l => l.sessionId == sess);
+
 
                     for (int i = 0; i < logs.Count(); i++)
                     {
