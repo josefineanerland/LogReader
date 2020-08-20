@@ -27,7 +27,7 @@ namespace Reader
                         {
                             if (!line.StartsWith("#") && line.Length >= 3)
                             {
-                                //Console.WriteLine(line);
+                                // split each line of text-file
                                 string[] split = line.Split('\t');
                                 if (split.Length == 4)
                                 {
@@ -40,7 +40,7 @@ namespace Reader
                                     logList.Add(logModel);
                                 }
                                 else
-                                // if tab isn't between all values, in case of whitespace or any other char
+                                // in case of whitespace between values instead of tab
                                 {
                                     logModel logModel = new logModel();
                                     char[] chars = { '\t', ' ' };
@@ -76,7 +76,7 @@ namespace Reader
                 IEnumerable<int> sessionList = logList.Select(s => s.sessionId).Distinct().ToList();
                 foreach (int sess in sessionList)
                 {
-
+                    
                     List<logModel> logs = logList.FindAll(l => l.sessionId == sess);
 
                     for (int i = 0; i < logs.Count(); i++)
@@ -106,7 +106,7 @@ namespace Reader
 
         static void Main(string[] args)
         {
-            ReadLog(@"C:\Users\Svea User\Desktop\Items.txt");
+            ReadLog(@"C:\Users\Svea User\Desktop\Test-logfile.txt");
         }
     }
 
