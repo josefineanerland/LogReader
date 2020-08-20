@@ -2,7 +2,7 @@
 {
     public class logModel
     {
-        public string timeSpan { get; set; }
+        public string timeStamp { get; set; }
         public int sessionId { get; set; }
         public string Event { get; set; }
         public string Data { get; set; }

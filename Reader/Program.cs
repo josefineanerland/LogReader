@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Reader
 {
@@ -32,7 +33,7 @@ namespace Reader
                                 if (split.Length == 4)
                                 {
                                     logModel logModel = new logModel();
-                                    logModel.timeSpan = split[0];
+                                    logModel.timeStamp = split[0];
                                     logModel.sessionId = Int32.Parse(split[1]);
                                     logModel.Event = split[2];
                                     logModel.Data = split[3];
@@ -52,7 +53,7 @@ namespace Reader
                                     line = line.Substring(ev.Length + 1);
                                     string data = line;
 
-                                    logModel.timeSpan = time;
+                                    logModel.timeStamp = time;
                                     logModel.sessionId = Int32.Parse(sess);
                                     logModel.Event = ev;
                                     logModel.Data = data;
@@ -73,7 +74,10 @@ namespace Reader
             finally
             {
                 // observation-list
+
                 IEnumerable<int> sessionList = logList.Select(s => s.sessionId).Distinct().ToList();
+
+
                 foreach (int sess in sessionList)
                 {
                     
@@ -87,7 +91,7 @@ namespace Reader
                             observation.IPadress = logs.Find(o => o.Event == "CONNECT").Data;
                             observation.userName = logs[i - 1].Data;
                             observation.outCome = logs[i].Event;
-                            observation.timeSpan = logs[i].timeSpan;
+                            observation.timeStamp = logs[i].timeStamp;
 
                             obsList.Add(observation);
                         }
@@ -97,10 +101,9 @@ namespace Reader
                 //print observations
                 foreach (observationModel item in obsList)
                 {
-                    Console.WriteLine(item.timeSpan + " " + item.outCome + " " + item.IPadress + " " + item.userName);
+                    Console.WriteLine(item.timeStamp + " " + item.outCome + " " + item.IPadress + " " + item.userName);
                 }
 
-                Console.WriteLine("Executing finally block.");
             }
         }
 
