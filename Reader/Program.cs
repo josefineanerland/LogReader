@@ -15,13 +15,14 @@ namespace Reader
 
             try
             {
-
+                // read file
                 using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
                 {
                     using (StreamReader sr = new StreamReader(fs))
                     {
 
                         string line;
+                        // read and split all rows
                         while ((line = sr.ReadLine()) != null)
                         {
                             if (!line.StartsWith("#") && line.Length >= 3)
@@ -39,6 +40,7 @@ namespace Reader
                                     logList.Add(logModel);
                                 }
                                 else
+                                // if tab isn't between all values, in case of whitespace or any other char
                                 {
                                     logModel logModel = new logModel();
                                     char[] chars = { '\t', ' ' };
@@ -63,12 +65,14 @@ namespace Reader
                 }
 
             }
+            // in case of error
             catch (Exception e)
             {
                 Console.WriteLine("Exception: " + e.Message);
             }
             finally
             {
+                // observation-list
                 IEnumerable<int> sessionList = logList.Select(s => s.sessionId).Distinct().ToList();
                 foreach (int sess in sessionList)
                 {
@@ -90,6 +94,7 @@ namespace Reader
                     }
 
                 }
+                //print observations
                 foreach (observationModel item in obsList)
                 {
                     Console.WriteLine(item.timeSpan + " " + item.outCome + " " + item.IPadress + " " + item.userName);
