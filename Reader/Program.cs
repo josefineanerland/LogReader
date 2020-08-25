@@ -9,6 +9,11 @@ namespace Reader
     class Program
     {
 
+        static void Main(string[] args)
+        {
+            ReadLog(@"C:\Users\Svea User\Desktop\Test-logfile.txt");
+        }
+
         static void ReadLog(string file)
         {
             List<LogModel> logList = new List<LogModel>();
@@ -33,11 +38,11 @@ namespace Reader
                                 if (split.Length == 4)
                                 {
                                     LogModel logModel = new LogModel();
-                                    logModel.timeStamp = TimeSpan.Parse(split[0]);
+                                    logModel.TimeStamp = TimeSpan.Parse(split[0]);
                                     //check if sessionID contains letters, otherwise skip
                                     if (Int32.TryParse(split[1], out int s))
                                     {
-                                        logModel.sessionId = s;
+                                        logModel.SessionId = s;
                                     }
                                     logModel.Event = split[2];
                                     logModel.Data = split[3];
@@ -57,8 +62,8 @@ namespace Reader
                                     line = line.Substring(ev.Length + 1);
                                     string data = line;
 
-                                    logModel.timeStamp = TimeSpan.Parse(time);
-                                    logModel.sessionId = Int32.Parse(sess);
+                                    logModel.TimeStamp = TimeSpan.Parse(time);
+                                    logModel.SessionId = Int32.Parse(sess);
                                     logModel.Event = ev;
                                     logModel.Data = data;
                                     logList.Add(logModel);
@@ -68,23 +73,13 @@ namespace Reader
                         }
                     }
                 }
-
-            }
-            // in case of error
-            catch (Exception e)
-            {
-                Console.WriteLine("Exception: " + e.Message);
-            }
-            finally
-            {
                 // observation-list
 
-                IEnumerable<int> sessionList = logList.Select(s => s.sessionId).Distinct().ToList();
+                IEnumerable<int> sessionList = logList.Select(s => s.SessionId).Distinct().ToList();
 
                 foreach (int sess in sessionList)
                 {
-                    List<LogModel> logs = logList.FindAll(l => l.sessionId == sess);
-
+                    List<LogModel> logs = logList.FindAll(l => l.SessionId == sess);
 
                     for (int i = 0; i < logs.Count(); i++)
                     {
@@ -92,27 +87,32 @@ namespace Reader
                         {
                             ObservationModel observation = new ObservationModel();
                             observation.IPadress = logs.Find(o => o.Event == "CONNECT").Data;
-                            observation.userName = logs[i - 1].Data;
-                            observation.outCome = logs[i].Event;
-                            observation.timeStamp = logs[i].timeStamp;
+                            observation.UserName = logs[i - 1].Data;
+                            observation.OutCome = logs[i].Event;
+                            observation.TimeStamp = logs[i].TimeStamp;
 
                             obsList.Add(observation);
                         }
                     }
 
                 }
+            }
+
+            // in case of error
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception: " + e.Message);
+            }
+            finally
+            {
+
                 //print observations
                 foreach (ObservationModel item in obsList)
                 {
-                    Console.WriteLine(item.timeStamp + " " + item.outCome + " " + item.IPadress + " " + item.userName);
+                    Console.WriteLine(item.TimeStamp + " " + item.OutCome + " " + item.IPadress + " " + item.UserName);
                 }
 
             }
-        }
-
-        static void Main(string[] args)
-        {
-            ReadLog(@"C:\Users\Svea User\Desktop\Test-logfile.txt");
         }
     }
 
